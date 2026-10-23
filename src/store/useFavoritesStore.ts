@@ -1,17 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import type { Article } from '../types/article';
 import { zustandStorage } from './zustandStorage';
-
-interface Article {
-  url: string;
-  title: string;
-  urlToImage?: string;
-  description?: string;
-  source?: {
-    name: string;
-  };
-  publishedAt?: string;
-}
 
 interface FavoriteState {
   favorites: Article[];

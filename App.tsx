@@ -1,13 +1,16 @@
-import React from "react";
-import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
+import React from 'react';
+import {
+  NavigationContainer,
+  DefaultTheme,
+  DarkTheme,
+} from '@react-navigation/native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StatusBar } from 'react-native';
 
-import { useThemeStore } from "./src/store/useThemeStore";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { RootNavigator } from "./src/navigation/RootNavigator";
-
-const queryClient = new QueryClient();
+import { useThemeStore } from './src/store/useThemeStore';
+import { QueryClientProvider } from '@tanstack/react-query';
+import { queryClient } from './src/lib/queryClient';
+import { RootNavigator } from './src/navigation/RootNavigator';
 
 // Custom themes for navigation
 const CustomLightTheme = {
@@ -38,19 +41,21 @@ const CustomDarkTheme = {
 
 export default function App() {
   const { theme } = useThemeStore();
-  const isDark = theme === "dark";
+  const isDark = theme === 'dark';
 
   return (
     <SafeAreaProvider>
       <QueryClientProvider client={queryClient}>
         {/* StatusBar configuration based on theme */}
         <StatusBar
-          barStyle={isDark ? "light-content" : "dark-content"}
+          barStyle={isDark ? 'light-content' : 'dark-content'}
           backgroundColor={isDark ? '#121212' : '#ffffff'}
           translucent={false}
         />
 
-        <NavigationContainer theme={isDark ? CustomDarkTheme : CustomLightTheme}>
+        <NavigationContainer
+          theme={isDark ? CustomDarkTheme : CustomLightTheme}
+        >
           <RootNavigator />
         </NavigationContainer>
       </QueryClientProvider>
