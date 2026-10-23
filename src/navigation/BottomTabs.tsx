@@ -1,6 +1,6 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react';
-import { Image, Platform } from 'react-native';
+import { Image, Platform, StyleSheet } from 'react-native';
 
 import FavoritesScreen from '../screens/FavoritesScreen';
 import HomeScreen from '../screens/HomeScreen';
@@ -17,10 +17,28 @@ const home = require('../assets/home-icon.png');
 const homeOutline = require('../assets/home-otline.png');
 const Tab = createBottomTabNavigator<TabParamList>();
 
+type TabIconProps = { color: string; focused: boolean };
+
+const HomeTabIcon = ({ color, focused }: TabIconProps) => (
+  <Image
+    source={focused ? home : homeOutline}
+    tintColor={color}
+    style={styles.homeIcon}
+  />
+);
+
+const FavoritesTabIcon = ({ color, focused }: TabIconProps) => (
+  <Image
+    source={focused ? heart : heartOutline}
+    tintColor={color}
+    style={styles.favoritesIcon}
+  />
+);
+
 export function BottomTabs() {
   const { theme } = useThemeStore();
   const { favorites } = useFavoritesStore();
-  const isDark = theme === "dark";
+  const isDark = theme === 'dark';
   const favoriteCount = favorites.length;
 
   return (
@@ -55,18 +73,14 @@ export function BottomTabs() {
         tabBarItemStyle: {
           paddingVertical: 4,
         },
-
       }}
     >
       <Tab.Screen
         name="Home"
         component={HomeScreen}
         options={{
-          tabBarLabel: "Home",
-          tabBarIcon: ({ color, focused }) => (
-            <Image source={focused ? home : homeOutline} tintColor={color} width={30} height={20} style={{ width: 24, height: 24 }} />
-          ),
-
+          tabBarLabel: 'Home',
+          tabBarIcon: HomeTabIcon,
         }}
       />
 
@@ -75,9 +89,7 @@ export function BottomTabs() {
         component={FavoritesScreen}
         options={{
           tabBarLabel: 'Favorites',
-          tabBarIcon: ({ color, focused }) => (
-            <Image source={focused ? heart : heartOutline} tintColor={color} width={30} height={30} style={{ width: 30, height: 30 }} />
-          ),
+          tabBarIcon: FavoritesTabIcon,
           // Show favorite count as badge
           tabBarBadge: favoriteCount > 0 ? favoriteCount : undefined,
           tabBarBadgeStyle: {
@@ -95,3 +107,8 @@ export function BottomTabs() {
     </Tab.Navigator>
   );
 }
+
+const styles = StyleSheet.create({
+  homeIcon: { width: 24, height: 24 },
+  favoritesIcon: { width: 30, height: 30 },
+});
